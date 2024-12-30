@@ -1,0 +1,39 @@
+
+name: Renderizar Equações LaTeX
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.md'  # Aciona quando arquivos .md forem modificados
+
+jobs:
+  render_latex:
+    runs-on: ubuntu-latest  # Ambiente Linux
+
+    steps:
+    - name: Checkout repositório
+      uses: actions/checkout@v2
+
+    - name: Configurar Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Instalar dependências
+      run: |
+        python -m pip install --upgrade pip
+        pip install matplotlib markdown
+
+    - name: Rodar script para renderizar LaTeX
+      run: |
+        python render_latex_markdown.py  # O script Python que criamos
+
+    - name: Commit e Push alterações
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add .
+        git commit -m "Renderizar equações LaTeX como imagens"
+        git push
