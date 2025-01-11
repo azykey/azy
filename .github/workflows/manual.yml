@@ -42,9 +42,9 @@ jobs:
       # Passo 6: Commitar e enviar alterações
       - name: Commit e Push alterações
         run: |
-          git add .
-          git commit -m "Renderizar equações LaTeX como imagens"
-          git push
+          git add .  # Adiciona as alterações
+          git commit -m "Renderizar equações LaTeX como imagens"  # Faz commit
+          git push  # Envia para o repositório
         env:
           GIT_AUTHOR_NAME: "GitHub Actions"
           GIT_AUTHOR_EMAIL: "actions@github.com"
