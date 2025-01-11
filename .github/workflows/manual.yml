@@ -1,39 +1,50 @@
-
 name: Renderizar Equações LaTeX
 
 on:
   push:
     branches:
-      - main
+      - main  # Aciona em pushes na branch 'main'
     paths:
-      - '**/*.md'  # Aciona quando arquivos .md forem modificados
+      - '**/*.md'  # Apenas quando arquivos .md forem modificados
 
 jobs:
   render_latex:
-    runs-on: ubuntu-latest  # Ambiente Linux
+    runs-on: ubuntu-latest  # Usa ambiente Linux
 
     steps:
-    - name: Checkout repositório
-      uses: actions/checkout@v2
+      # Passo 1: Fazer checkout do repositório
+      - name: Checkout repositório
+        uses: actions/checkout@v3
 
-    - name: Configurar Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
+      # Passo 2: Configurar Python no ambiente
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-    - name: Instalar dependências
-      run: |
-        python -m pip install --upgrade pip
-        pip install matplotlib markdown
+      # Passo 3: Instalar dependências necessárias
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install matplotlib markdown
 
-    - name: Rodar script para renderizar LaTeX
-      run: |
-        python render_latex_markdown.py  # O script Python que criamos
+      # Passo 4: Rodar o script de renderização
+      - name: Renderizar equações LaTeX
+        run: |
+          python render_latex_markdown.py  # Executa o script de renderização
 
-    - name: Commit e Push alterações
-      run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
-        git add .
-        git commit -m "Renderizar equações LaTeX como imagens"
-        git push
+      # Passo 5: Configurar usuário do Git para commits automáticos
+      - name: Configurar Git
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
+      # Passo 6: Commitar e enviar alterações
+      - name: Commit e Push alterações
+        run: |
+          git add .
+          git commit -m "Renderizar equações LaTeX como imagens"
+          git push
+        env:
+          GIT_AUTHOR_NAME: "GitHub Actions"
+          GIT_AUTHOR_EMAIL: "actions@github.com"
